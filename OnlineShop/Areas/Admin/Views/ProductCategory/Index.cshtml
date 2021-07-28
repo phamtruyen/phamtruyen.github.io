@@ -1,0 +1,95 @@
+﻿@model PagedList.IPagedList<Model.EF.ProductCategory>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layouts.cshtml";
+}
+
+@section header{
+    Danh mục sản phẩm
+}
+<p>
+    <a class="btn btn-primary" href="/Admin/ProductCategory/Create">Thêm mới</a>
+</p>
+<table class="table">
+    <tr>
+        <th>#</th>
+        <th>
+            Name
+        </th>
+        <th>
+            Tiêu đề không dấu
+        </th>
+        <th>
+            Danh mục cha
+        </th>
+        <th>
+            Thứ tự
+        </th>
+        <th>
+            Tiêu đề SEO
+        </th>
+        <th>
+            Ngày tạo
+        </th>
+        <th>
+            Được tạo bởi
+        </th>
+
+        <th>
+            Trạng thái
+        </th>
+        <th>
+            Trang chủ
+        </th>
+
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr id=" row_@item.ID">
+            <td>
+                @Html.ActionLink("Sửa", "Edit", new { id = item.ID }) |
+                @Ajax.ActionLink("Xóa", "Delete",new { @id=item.ID }, new AjaxOptions
+                   {
+                       Confirm = "Bạn có muốn xoá bản ghi này?",
+                       OnComplete = "$('#row_"+@item.ID+ "').remove()",
+                       HttpMethod = "Delete"
+                   })
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MetaTitle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ParentID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DisplayOrder)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SeoTitle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedData)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShowOnHome)
+            </td>
+
+        </tr>
+    }
+
+</table>
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, @searchString = ViewBag.SearchString }))
